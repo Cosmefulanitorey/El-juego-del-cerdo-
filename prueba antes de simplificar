@@ -1,0 +1,306 @@
+#include <iostream>
+#include <ctime>
+#include <stdio.h>
+#include <fstream>
+
+
+
+using namespace std;
+
+#include "funcione.h"
+
+int main()
+{
+    const int TAM=30,pun =4;
+    int a=0,cara[2]= {},puntaje_j1[pun]= {},puntaje_j2[pun]= {},ronda=0,ronda2=0;
+    char jugador1[TAM],jugador2[TAM],decision='s';
+    int ingreso =0,i;
+    srand(time(NULL));
+    int trufas1,trufas2;
+    bool selection,se_hunde=0;
+
+//Comienzo de menu de seleccion
+    do
+
+    {
+
+
+        cout<<"1.Empezar partida"<<endl;
+        cout<<"2.Ver puntajes"<<endl;
+        cout<<"3.Salir"<<endl;
+        cin>>a;
+        cin.ignore();
+        switch(a)
+        {
+        case 1:
+            /* Se definen los nombre de los jugadores y se realizan los tiros de seleccion de quien comienzo a tirar */
+            cout<<"Ingrese el nombre del primer jugador "<<endl;
+            Nombre_jugadores(jugador1,jugador2);
+            cout<<"Bienvenidos "<<jugador1<<" y "<<jugador2<<" al juego del Gran cerdo"<<endl;
+            cout<<"Lancen los dados, el que saque el numero mas alto sera el primero en comenzar"<<endl;
+            cout<<"Comenzando por "<<jugador1<<" ingresa el numero 1 para tirar el dado"<<endl;
+            cin>>ingreso;
+            if(ingreso==1)
+            {
+                for (i=0; i<2; i++)
+                {
+                    cara[i]= (rand()%6)+1;
+                }
+                cout<<"el primer dado quedo en la cara "<<cara[0]<<endl;
+                cout<<"el segundo tiro quedo en la cara "<<cara[1]<<endl;
+                puntaje_j1[0]=cara[0]+cara[1];
+                ingreso=0;
+
+            }
+            cout<<jugador1<<" la totalidad de puntos sumados es de "<<puntaje_j1[0]<<endl;
+            cout<<"Ahora es el turno de "<<jugador2<<" ingresa el numero 1 para tirar el dado"<<endl;
+            cin>>ingreso;
+            if(ingreso==1)
+            {
+                for (i=0; i<2; i++)
+                {
+                    cara[i]= (rand()%6)+1;
+                }
+                cout<<"el primer dado quedo en la cara "<<cara[0]<<endl;
+                cout<<"el segundo tiro quedo en la cara "<<cara[1]<<endl;
+                puntaje_j2[0]=cara[0]+cara[1];
+                ingreso=0;
+
+            }
+            cout<<jugador2<<" la totalidad de puntos sumados es de "<<puntaje_j2[0]<<endl;
+            /*En base al resultado se asigna un valor booleano que determina quien es el que comienza a tirar*/
+            if(puntaje_j1<puntaje_j2)
+            {
+                cout<<"Genial "<<jugador2<<" comienzas tu"<<endl;
+                selection=1;
+                /*Con el fin de reutilizar el array lo vuevlo a inicialiar en 0*/
+                puntaje_j1[0]=0;
+                puntaje_j2[0]=0;
+            }
+            else
+            {
+                cout<<"Genial "<<jugador1<<" comienzas tu"<<endl;
+                selection=0;
+
+            }
+            /*Determinado el valor booleano se ingresa en el while de selection donde empieza a
+            ciclear continuamente mientras que el usuario quiera seguir tirando, en caso de ingresar N
+            el ciclo se termina y pasa al otro usuario*/
+            while(ronda!=5&&ronda2!=5)
+                {
+            while(ronda!=5)
+            {
+                while (selection==0)
+                {
+                    while(decision=='s')
+                    {
+                        /*El parametro ronda da lugar al puntaje correspondiente a esa ronda dentro del vector*/
+                        cout<<"====================================================================="<<endl;
+                        cout<<"Puntaje "<<jugador1<<" "<<puntaje_j1[ronda]<<" || "<<" Puntaje "<<jugador2[ronda2]<<" "<<puntaje_j2<<endl;
+                        cout<<"====================================================================="<<endl;
+                        cout<<"Perfecto "<<jugador1<<" presiona 1 para tirar los dados"<<endl;
+                        cin>>ingreso;
+                        for (i=0; i<2; i++)
+                        {
+                            cara[i]= (rand()%6)+1;
+                        }
+                        cout<<"el primer dado quedo en la cara "<<cara[0]<<endl;
+                        cout<<"el segundo tiro quedo en la cara "<<cara[1]<<endl;
+                        if (puntaje_j1[ronda]>=50||se_hunde==1)
+                        {
+                            cara[2]=(rand()%6)+1;
+                            cout<<"el segundo tiro quedo en la cara "<<cara[2]<<endl;
+
+                            if(cara[0]==1&&cara[1]==1||cara[2]==1&&cara[1]==1||cara[0]==1&&cara[2]==1)
+                            {
+                                for(i=0; i<=pun; i++)
+                                {
+                                    puntaje_j1[i]=0;
+                                }
+                            }
+                            else
+                            {
+                                if( cara[0]==1||cara[1]==1||cara[2]==1)
+                                    {
+                                        puntaje_j1[ronda]= {};
+                                    }
+                                    else
+                                    {
+                                        if(cara[0]==cara[1]&&cara[1]==cara[2])
+                                        {
+                                            puntaje_j1[ronda]+=(cara[0]+cara[1]+cara[2])*2;
+                                        }
+                                        else
+                                        {
+                                            puntaje_j1[ronda]+=cara[0]+cara[1]+cara[2];
+                                        }
+                                    }
+                            }
+
+
+                        }
+                        else
+                        {
+                            if(cara[0]==1&&cara[1]==1)
+                            {
+                                for(i=0; i<=pun; i++)
+                                {
+                                    puntaje_j1[i]=0;
+                                }
+                            }
+                            else
+                            {
+                                if( cara[0]==1||cara[1]==1)
+                                    {
+                                        puntaje_j1[ronda]= {};
+                                    }
+                                    else
+                                    {
+                                        if(cara[0]==cara[1])
+                                        {
+                                            puntaje_j1[ronda]+=(cara[0]+cara[1])*2;
+                                        }
+                                        else
+                                        {
+                                            puntaje_j1[ronda]+=cara[0]+cara[1];
+                                        }
+                                    }
+                            }
+                        }
+
+
+                        ingreso=0;
+                        cout<<"¿Quiere seguir tirando los dados?"<<endl;
+                        cout<<"¿Continua? (s/n)"<<endl;
+                        cin>>decision;
+
+                    }
+
+
+                }
+                /*Se resetean los valores para que el codigo no se bloquee y se summa valor a la ronda del jugador*/
+                decision='s';
+                selection=1;
+                ronda++;
+            }
+
+
+
+
+        while (ronda2!=5)
+    {
+        while (selection==1)
+            {
+                while (decision=='s')
+                {
+                    cout<<"====================================================================="<<endl;
+                    cout<<"Puntaje "<<jugador1<<" "<<puntaje_j1[ronda]<<" || "<<" Puntaje "<<jugador2[ronda2]<<" "<<puntaje_j2<<endl;
+                    cout<<"====================================================================="<<endl;
+                    cout<<"Perfecto "<<jugador2<<" presiona 1 para tirar los dados"<<endl;
+                    cin>>ingreso;
+                    for (i=0; i<2; i++)
+                    {
+                        cara[i]= (rand()%6)+1;
+                    }
+                    cout<<"el primer dado quedo en la cara "<<cara[0]<<endl;
+                    cout<<"el segundo tiro quedo en la cara "<<cara[1]<<endl;
+                    if (puntaje_j1[ronda2]>=50||se_hunde==1)
+                    {
+                        cara[2]=(rand()%6)+1;
+                        cout<<"el segundo tiro quedo en la cara "<<cara[2]<<endl;
+                           if(cara[0]==1&&cara[1]==1||cara[2]==1&&cara[1]==1||cara[0]==1&&cara[2]==1)
+                            {
+                                for(i=0; i<=pun; i++)
+                                {
+                                    puntaje_j2[i]=0;
+                                }
+                            }
+                            else
+                            {
+                                if( cara[0]==1||cara[1]==1||cara[2]==1)
+                                    {
+                                        puntaje_j2[ronda2]= {};
+                                    }
+                                    else
+                                    {
+                                        if(cara[0]==cara[1]&&cara[1]==cara[2])
+                                        {
+                                            puntaje_j2[ronda2]+=(cara[0]+cara[1]+cara[2])*2;
+                                        }
+                                        else
+                                        {
+                                            puntaje_j2[ronda2]+=cara[0]+cara[1]+cara[2];
+                                        }
+                                    }
+                            }
+                    }
+                    else
+                    {
+                        if(cara[0]==1&&cara[1]==1)
+                        {
+                            for(i=0; i<=pun; i++)
+                            {
+                                puntaje_j2[i]=0;
+                            }
+                        }
+                        else
+                        {
+                            if( cara[0]==1||cara[1]==1)
+                                {
+                                    puntaje_j2[ronda2]= {};
+                                }
+                                else
+                                {
+                                    if(cara[0]==cara[1])
+                                    {
+                                        puntaje_j2[ronda2]+=(cara[0]+cara[1])*2;
+                                    }
+                                    else
+                                    {
+                                        puntaje_j2[ronda2]+=cara[0]+cara[1];
+                                    }
+                                }
+                        }
+                    }
+
+                    ingreso=0;
+                    cout<<"¿Quiere seguir tirando los dados?"<<endl;
+                    cout<<"¿Continua? (s/n)"<<endl;
+                    cin>>decision;
+
+                }
+                decision='s';
+                selection=0;
+                ronda2++;
+            }
+
+        }
+            }
+
+
+
+
+
+
+
+
+
+        break;
+
+    case 2:
+        cout<<"Working progress"<<endl;
+        break;
+    case 3:
+        break;
+    default:
+        cout<<"Usted a ingresado un valor invalido\a"<<endl;
+        break;
+
+    }
+
+
+
+} while(a!=3);
+return 0;
+
+}
